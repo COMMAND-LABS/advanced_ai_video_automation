@@ -1,0 +1,437 @@
+{
+  "name": "Image to Video",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -240
+      ],
+      "id": "def085b3-1961-4d04-bff8-93bd1862006f",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e32bd8d8-ba84-4744-a21b-cd4648da1e6b",
+              "leftValue": "={{ $json['Make Video'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "5ae60506-b9fc-450a-81c4-a57a1557666d",
+              "leftValue": "={{ $json['Make Video'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        360,
+        -240
+      ],
+      "id": "d1949b9e-c2e8-4e0e-a866-4724643c20df",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblncciYVGuJQyyWd",
+          "mode": "list",
+          "cachedResultName": "Segments",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblncciYVGuJQyyWd"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Get segments').item.json.ID }}",
+            "Video Render Request ID": "={{ $json.request_id }}",
+            "Start Time": 0,
+            "End Time": 0,
+            "Make Video": "={{ $('If').item.json['Make Video'] }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Script Segment",
+              "displayName": "Script Segment",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Start Time",
+              "displayName": "Start Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "End Time",
+              "displayName": "End Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image",
+              "displayName": "Image",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image URL",
+              "displayName": "Image URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image Prompt",
+              "displayName": "Image Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video Prompt",
+              "displayName": "Video Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video URL",
+              "displayName": "Video URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Full Script",
+              "displayName": "Full Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Make Video",
+              "displayName": "Make Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video Render Request ID",
+              "displayName": "Video Render Request ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        820,
+        -260
+      ],
+      "id": "9e84ea63-54d4-4977-adbe-d76286330857",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/kling-video/v2.1/master/image-to-video",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Key bba4bbdf-5a20-4957-b7f2-f490923b6bf7:21a98219f55c3570abee76712256f03d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json['Image Prompt'] }}"
+            },
+            {
+              "name": "image_url",
+              "value": "={{ $json['Image URL'] }}"
+            },
+            {
+              "name": "duration",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        -260
+      ],
+      "id": "d9598f00-38e9-4a06-8e22-4d93b61b3d33",
+      "name": "Gen video"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblD59KoSU9lhd4Si",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblD59KoSU9lhd4Si"
+        },
+        "filterByFormula": "{Active} = '1'",
+        "returnAll": false,
+        "limit": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -80,
+        -240
+      ],
+      "id": "62828bdb-bd4f-4b95-a6e9-acca52f37a8e",
+      "name": "Get script",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblncciYVGuJQyyWd",
+          "mode": "list",
+          "cachedResultName": "Segments",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblncciYVGuJQyyWd"
+        },
+        "filterByFormula": "={Full Script} = {{ $('Get script').item.json.ID }}",
+        "returnAll": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        140,
+        -240
+      ],
+      "id": "eef2f0b3-b318-4cf4-9c55-a92e4f284661",
+      "name": "Get segments",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Gen video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gen video": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get script": {
+      "main": [
+        [
+          {
+            "node": "Get segments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get segments": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "937ba58f-57f4-486e-b8b7-8bdff614e81f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "cf7ShEEuO6fllflf",
+  "tags": []
+}

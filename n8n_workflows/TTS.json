@@ -1,0 +1,355 @@
+{
+  "name": "TTS",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        -80
+      ],
+      "id": "e325367f-62da-4051-b909-ab4bc776d30d",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/cEGQKUkjUFtBBn9scZWU?output_format=mp3_44100_128",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.Script)}},\n  \"model_id\": \"eleven_multilingual_v2\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -160,
+        -80
+      ],
+      "id": "c6705a65-9e75-4ec6-9a5c-3f64d801305f",
+      "name": "ElevenLabs TTS",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YPOETjtVlfizrPrQ",
+          "name": "Eleven Labs Header Auth for the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblD59KoSU9lhd4Si",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblD59KoSU9lhd4Si"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Active": true,
+            "Narrated Audio URL": "={{ $json.direct_dropbox_url }}",
+            "Narrated Audio": "=[\n    {\n        \"url\": \"{{ $json.direct_dropbox_url }}\",\n        \"filename\": \"{{ $('Get link to file in Dropbox').item.json.name }}\"\n    }\n]",
+            "ID": "={{ $('Get script').item.json.ID }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Script",
+              "displayName": "Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Narrated Audio",
+              "displayName": "Narrated Audio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Narrated Audio URL",
+              "displayName": "Narrated Audio URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Active",
+              "displayName": "Active",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Segments",
+              "displayName": "Segments",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        700,
+        -80
+      ],
+      "id": "6506a072-0c0e-4810-b598-ef1b100bca85",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"path\": \"{{ $json.path_lower }}\",\n  \"settings\": {\n    \"access\": \"viewer\",\n    \"allow_download\": true,\n    \"audience\": \"public\",\n    \"requested_visibility\": \"public\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        -80
+      ],
+      "id": "cac51280-e13f-40a4-8737-4a2fde3c6743",
+      "name": "Get link to file in Dropbox",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "eJDKjRR2gs94Jx9q",
+          "name": "Dropbox Custom OAuth2 Credential with refresh token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "=/projects/aaiva_n8n/example_1/script_{{ $now.toMillis() }}.mp3",
+        "binaryData": true
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        60,
+        -80
+      ],
+      "id": "2cbe903e-9262-4a94-9c96-f534f6d1dcbc",
+      "name": "Upload TTS file to Dropbox",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "dIuu8o1E4qgH6vbJ",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "56184a70-1c52-40ab-948f-b482d0e9f2ec",
+              "name": "direct_dropbox_url",
+              "value": "={{$json[\"url\"].replace(\"dl=0\", \"dl=1\")}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        -80
+      ],
+      "id": "35d1bdaa-906e-424c-b861-cdb2a5f90e20",
+      "name": "Edit link to file"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblD59KoSU9lhd4Si",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblD59KoSU9lhd4Si"
+        },
+        "filterByFormula": "{Active} = '1'",
+        "returnAll": false,
+        "limit": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -380,
+        -80
+      ],
+      "id": "2c69c98e-5935-4cab-8e56-375203ec86f2",
+      "name": "Get script",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ElevenLabs TTS": {
+      "main": [
+        [
+          {
+            "node": "Upload TTS file to Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get link to file in Dropbox": {
+      "main": [
+        [
+          {
+            "node": "Edit link to file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload TTS file to Dropbox": {
+      "main": [
+        [
+          {
+            "node": "Get link to file in Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit link to file": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get script": {
+      "main": [
+        [
+          {
+            "node": "ElevenLabs TTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8e0c90fa-b71a-4b21-9821-479d921c2dee",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "PZmSKobCY20u1fNZ",
+  "tags": []
+}

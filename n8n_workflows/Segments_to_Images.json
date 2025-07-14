@@ -1,0 +1,707 @@
+{
+  "name": "Segments to Images",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -175
+      ],
+      "id": "3dfa771b-c9d9-490b-83d1-b7bb9dde387c",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=# TASK\n\nCreate an image prompt for an #short form viral video created using AI Video Automation techniques. Your task is to create an image prompt that will produce a beautiful and aesthetically pleasing image for a section of the overall script. The image prompt text should contain no special chars and be ready for use by a image-to-image model.\n\n## CURRENT SECTION OF SCRIPT\n\n{{ $json['Script Segment'] }}\n\n## OVERALL SCRIPT\n\n{{ $('Get script').item.json.Script }}\n\n## JSON OUTPUT RESPONSE FORMAT\n\n{\n  \"imagePrompt\": string;\n}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -100,
+        -175
+      ],
+      "id": "5fbaa1fb-9fee-4ecf-9d09-8d68b982945c",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "Q9S9do9K9W4rQsK3",
+          "name": "OpenAi API key for AAIVA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "acebd61f-879e-40cd-a4ad-960e735e72bf",
+              "leftValue": "={{ $json.generations_by_pk.status }}",
+              "rightValue": "COMPLETE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        716,
+        -250
+      ],
+      "id": "2e1eee8e-2e81-4e22-bd69-ad7f8fc87ff1",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "amount": 4
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        936,
+        -75
+      ],
+      "id": "4e8ab5fe-bb6f-4728-992c-40bf8448b552",
+      "name": "Wait",
+      "webhookId": "3ca4c3eb-75fd-4ade-9db8-d573b927bd35"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.leonardo.ai/api/rest/v1/generations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "authorization",
+              "value": "Bearer d35fae03-dac6-4245-9552-3e1de8b5bf72"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "modelId",
+              "value": "de7d3faf-762f-48e0-b3b7-9d0ac3a3fcf3"
+            },
+            {
+              "name": "contrast",
+              "value": "={{Number.parseFloat(3.5)}}"
+            },
+            {
+              "name": "prompt",
+              "value": "={{ $json.message.content.imagePrompt }}"
+            },
+            {
+              "name": "num_images",
+              "value": "={{Number.parseInt(1)}}"
+            },
+            {
+              "name": "width",
+              "value": "={{Number.parseInt(864)}}"
+            },
+            {
+              "name": "height",
+              "value": "={{Number.parseInt(1536)}}"
+            },
+            {
+              "name": "styleUUID",
+              "value": "111dc692-d470-4eec-b791-3475abac4c46"
+            },
+            {
+              "name": "enhancePrompt",
+              "value": "={{Boolean(true)}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        276,
+        -175
+      ],
+      "id": "d1ed04ba-4cf4-4f0b-b883-8d8ac1bd5a66",
+      "name": "Gen image with Leonardo.ai"
+    },
+    {
+      "parameters": {
+        "url": "=https://cloud.leonardo.ai/api/rest/v1/generations/{{ $(\"Gen image with Leonardo.ai\").item.json.sdGenerationJob.generationId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "authorization",
+              "value": "Bearer d35fae03-dac6-4245-9552-3e1de8b5bf72"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        496,
+        -175
+      ],
+      "id": "9327c8a7-9851-46f3-9410-05c02376525a",
+      "name": "Check image gen status"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.generations_by_pk.generated_images[0].url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        936,
+        -300
+      ],
+      "id": "91faae73-246d-44d8-83d9-41265179e01c",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblncciYVGuJQyyWd",
+          "mode": "list",
+          "cachedResultName": "Segments",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblncciYVGuJQyyWd"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Get segments').item.json.ID }}",
+            "Image URL": "={{ $json.direct_dropbox_url }}",
+            "Image Prompt": "={{ $('OpenAI').item.json.message.content.imagePrompt }}",
+            "Image": "=[\n  {\n    \"url\": \"{{ $json.direct_dropbox_url }}\",\n    \"filename\": \"{{ $('Get link to file in Dropbox').item.json.name }}\"\n  }\n]",
+            "Full Script": "=[\"{{ $('Get script').item.json.id }}\"]",
+            "Start Time": "={{ $('Get segments').item.json['Start Time'] }}",
+            "End Time": "={{ $('Get segments').item.json['End Time'] }}",
+            "Make Video": false
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Script Segment",
+              "displayName": "Script Segment",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Start Time",
+              "displayName": "Start Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "End Time",
+              "displayName": "End Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image",
+              "displayName": "Image",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image URL",
+              "displayName": "Image URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image Prompt",
+              "displayName": "Image Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video",
+              "displayName": "Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video URL",
+              "displayName": "Video URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video Prompt",
+              "displayName": "Video Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Full Script",
+              "displayName": "Full Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Make Video",
+              "displayName": "Make Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video Render Request ID",
+              "displayName": "Video Render Request ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1816,
+        -300
+      ],
+      "id": "b8b25582-0e62-4117-9ac4-5e79660cf74a",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"path\": \"{{ $json.path_lower }}\",\n  \"settings\": {\n    \"access\": \"viewer\",\n    \"allow_download\": true,\n    \"audience\": \"public\",\n    \"requested_visibility\": \"public\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1376,
+        -300
+      ],
+      "id": "46abd540-f484-498b-91eb-77a556e850b2",
+      "name": "Get link to file in Dropbox",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "eJDKjRR2gs94Jx9q",
+          "name": "Dropbox Custom OAuth2 Credential with refresh token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "56184a70-1c52-40ab-948f-b482d0e9f2ec",
+              "name": "direct_dropbox_url",
+              "value": "={{$json[\"url\"].replace(\"dl=0\", \"dl=1\")}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1596,
+        -300
+      ],
+      "id": "eb8fb620-edab-4155-849d-4427988f6e0c",
+      "name": "Edit link to file"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "=/projects/aaiva_n8n/example_1/image_{{ $now.toMillis() }}.jpg",
+        "binaryData": true
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        1156,
+        -300
+      ],
+      "id": "2638f101-a7ed-48b5-9a85-968170afbba6",
+      "name": "Upload image to Dropbox",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "dIuu8o1E4qgH6vbJ",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblD59KoSU9lhd4Si",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblD59KoSU9lhd4Si"
+        },
+        "filterByFormula": "{Active} = '1'",
+        "returnAll": false,
+        "limit": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -540,
+        -175
+      ],
+      "id": "6ee880bd-ebe2-46c0-b2fc-fddd651bf505",
+      "name": "Get script",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblncciYVGuJQyyWd",
+          "mode": "list",
+          "cachedResultName": "Segments",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblncciYVGuJQyyWd"
+        },
+        "filterByFormula": "={Full Script} = {{ $('Get script').item.json.ID }}",
+        "returnAll": false,
+        "limit": 40,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        -175
+      ],
+      "id": "144b4311-7df3-4ff5-a9d3-79c76ef299f8",
+      "name": "Get segments",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Gen image with Leonardo.ai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check image gen status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gen image with Leonardo.ai": {
+      "main": [
+        [
+          {
+            "node": "Check image gen status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check image gen status": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get link to file in Dropbox": {
+      "main": [
+        [
+          {
+            "node": "Edit link to file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit link to file": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Upload image to Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload image to Dropbox": {
+      "main": [
+        [
+          {
+            "node": "Get link to file in Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get script": {
+      "main": [
+        [
+          {
+            "node": "Get segments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get segments": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5d1b55c5-4368-4d20-8dd5-13e15844a0e6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "l5n0JGv1NRtD7PSi",
+  "tags": []
+}

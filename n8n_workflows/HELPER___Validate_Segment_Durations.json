@@ -1,0 +1,372 @@
+{
+  "name": "HELPER - Validate Segment Durations",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        -80
+      ],
+      "id": "52db4bb0-7eec-45c3-a266-25e7da25443d",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "let segments = $input.all()\nfor (let i = 0; i < (segments.length-1); i++) {\n  if (segments[i].json['End Time'] !== segments[i+1].json['Start Time']) {\n    segments[i].json['End Time'] = segments[i+1].json['Start Time']\n  }\n}\nreturn segments"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        60,
+        -80
+      ],
+      "id": "4f1ee639-c3a5-4c28-9de5-453378470e25",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblD59KoSU9lhd4Si",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblD59KoSU9lhd4Si"
+        },
+        "filterByFormula": "{Active} = '1'",
+        "returnAll": false,
+        "limit": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -380,
+        -80
+      ],
+      "id": "289586d4-c3a4-4092-b565-ca9c2ab1f791",
+      "name": "Get script",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblncciYVGuJQyyWd",
+          "mode": "list",
+          "cachedResultName": "Segments",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblncciYVGuJQyyWd"
+        },
+        "filterByFormula": "={Full Script} = {{ $('Get script').item.json.ID }}",
+        "returnAll": false,
+        "limit": 40,
+        "options": {},
+        "sort": {
+          "property": [
+            {
+              "field": "ID"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        -80
+      ],
+      "id": "907d5213-5888-421b-bb24-1fcf875b5d45",
+      "name": "Get segments",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblncciYVGuJQyyWd",
+          "mode": "list",
+          "cachedResultName": "Segments",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblncciYVGuJQyyWd"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Make Video": "={{ $json['Make Video'] }}",
+            "ID": "={{ $json.ID }}",
+            "Start Time": "={{ $json['Start Time'] }}",
+            "End Time": "={{ $json['End Time'] }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Script Segment",
+              "displayName": "Script Segment",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Start Time",
+              "displayName": "Start Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "End Time",
+              "displayName": "End Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image",
+              "displayName": "Image",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image URL",
+              "displayName": "Image URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image Prompt",
+              "displayName": "Image Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video",
+              "displayName": "Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video URL",
+              "displayName": "Video URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video Prompt",
+              "displayName": "Video Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Full Script",
+              "displayName": "Full Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Make Video",
+              "displayName": "Make Video",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Video Render Request ID",
+              "displayName": "Video Render Request ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        300,
+        -80
+      ],
+      "id": "ead19282-9edd-44b4-b053-bc1e0bb20743",
+      "name": "Update segments",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Update segments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get script": {
+      "main": [
+        [
+          {
+            "node": "Get segments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get segments": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "52ee9f72-b3d9-4ea3-a3ac-2958982a587f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "J4XN3qZOhTSvhQei",
+  "tags": []
+}

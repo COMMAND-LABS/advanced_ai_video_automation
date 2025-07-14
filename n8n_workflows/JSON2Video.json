@@ -1,0 +1,219 @@
+{
+  "name": "JSON2Video",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "58654fc2-236a-4260-b016-f3b21cf75411",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "scenes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        880,
+        0
+      ],
+      "id": "92df0938-8e42-4b94-b794-149eb46c45ae",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.json2video.com/v2/movies",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"comment\": \"Video\",\n    \"resolution\": \"instagram-story\",\n    \"quality\": \"high\",\n    \"scenes\": {{ JSON.stringify($json.scenes) }},\n    \"elements\": [\n        {\n            \"type\": \"audio\",\n            \"src\": \"{{ $('Get script').item.json['Narrated Audio URL'] }}\"\n        }\n    ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        0
+      ],
+      "id": "460372a9-70ed-48fe-8cb2-81e6d9d3be23",
+      "name": "Stitch Video Together",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "EFAOVkq5D6fTc0eW",
+          "name": "JSON2Video Auth Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"comment\": \"Scene\",\n  \"elements\": [\n    {{ $json['Make Video'] ? {\n      \"type\": \"video\",\n      \"src\": $json.Video[0].url,\n      \"resize\": \"cover\",\n      \"position\": \"center-center\",\n      \"duration\": $json['End Time'] - $json['Start Time'] \n    } : {\n      \"type\": \"image\",\n      \"src\": $json.Image[0].url,\n      \"zoom\": -1,\n      \"resize\": \"cover\",\n      \"position\": \"center-center\",\n      \"duration\": $json['End Time'] - $json['Start Time'] \n    }\n    }},\n    {\n      \"type\": \"text\",\n      \"style\": \"002\",\n      \"text\": \"{{ $json['Script Segment'] }}\",\n      \"settings\": {\n        \"font-family\": \"Roboto\",\n        \"font-size\": \"80px\",\n        \"font-weight\": \"700\",\n        \"font-color\": \"#000000\",\n        \"text-align\": \"center\"\n      }\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        660,
+        0
+      ],
+      "id": "19dcfe67-4139-42d0-8092-113bbe7b2f59",
+      "name": "Configure JSON2Video Scene"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblD59KoSU9lhd4Si",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblD59KoSU9lhd4Si"
+        },
+        "filterByFormula": "{Active} = '1'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "ed207c6d-0f86-4cfe-b5dd-156ed9442930",
+      "name": "Get script",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app5IzNLsLyDLmt1S",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblncciYVGuJQyyWd",
+          "mode": "list",
+          "cachedResultName": "Segments",
+          "cachedResultUrl": "https://airtable.com/app5IzNLsLyDLmt1S/tblncciYVGuJQyyWd"
+        },
+        "filterByFormula": "={Full Script} = {{ $json.ID }}",
+        "returnAll": false,
+        "options": {},
+        "sort": {
+          "property": [
+            {
+              "field": "ID"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "a714e362-8c76-4b45-8d59-4ae936a54530",
+      "name": "Get segments",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "f2UD15hDwDRnZwsH",
+          "name": "For the AAIVA YouTube Video"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Stitch Video Together",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configure JSON2Video Scene": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get script": {
+      "main": [
+        [
+          {
+            "node": "Get segments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get segments": {
+      "main": [
+        [
+          {
+            "node": "Configure JSON2Video Scene",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ab93023f-4f3e-4f2e-99b2-82621d34edc6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "Ed3dGtpZzsGKCeu8",
+  "tags": []
+}

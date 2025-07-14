@@ -1,0 +1,233 @@
+{
+  "name": "HELPER - Image to Image Gen",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "acebd61f-879e-40cd-a4ad-960e735e72bf",
+              "leftValue": "={{ $json.generations_by_pk.status }}",
+              "rightValue": "COMPLETE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        0
+      ],
+      "id": "675f8f4d-f80c-42cb-8539-a4eb02eec62c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "amount": 4
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        120
+      ],
+      "id": "6846ceb8-620c-47a3-bfbe-2dbbd899de79",
+      "name": "Wait",
+      "webhookId": "3ca4c3eb-75fd-4ade-9db8-d573b927bd35"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.leonardo.ai/api/rest/v1/generations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "authorization",
+              "value": "Bearer d35fae03-dac6-4245-9552-3e1de8b5bf72"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "modelId",
+              "value": "de7d3faf-762f-48e0-b3b7-9d0ac3a3fcf3"
+            },
+            {
+              "name": "contrast",
+              "value": "={{Number.parseFloat(3.5)}}"
+            },
+            {
+              "name": "prompt",
+              "value": "=Man smiling"
+            },
+            {
+              "name": "num_images",
+              "value": "={{Number.parseInt(1)}}"
+            },
+            {
+              "name": "width",
+              "value": "={{Number.parseInt(864)}}"
+            },
+            {
+              "name": "height",
+              "value": "={{Number.parseInt(1536)}}"
+            },
+            {
+              "name": "styleUUID",
+              "value": "111dc692-d470-4eec-b791-3475abac4c46"
+            },
+            {
+              "name": "enhancePrompt",
+              "value": "={{Boolean(true)}}"
+            },
+            {
+              "name": "init_image_id",
+              "value": "9a72d52f-d6c2-491e-9f40-83792bed20e9"
+            },
+            {
+              "name": "init_strength",
+              "value": "={{Number(0.4)}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -660,
+        0
+      ],
+      "id": "1c764d92-9982-4999-82c9-f6d39e480a83",
+      "name": "Gen image with Leonardo.ai"
+    },
+    {
+      "parameters": {
+        "url": "=https://cloud.leonardo.ai/api/rest/v1/generations/{{ $(\"Gen image with Leonardo.ai\").item.json.sdGenerationJob.generationId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "authorization",
+              "value": "Bearer d35fae03-dac6-4245-9552-3e1de8b5bf72"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -440,
+        0
+      ],
+      "id": "5e7d1738-1d52-4ac6-b10d-b08665c99e64",
+      "name": "Check image gen status"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        0
+      ],
+      "id": "4901092e-0c43-438a-bf93-44f92cc25327",
+      "name": "When clicking ‘Test workflow’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Check image gen status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gen image with Leonardo.ai": {
+      "main": [
+        [
+          {
+            "node": "Check image gen status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check image gen status": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Gen image with Leonardo.ai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "70ab3ce7-dd19-4907-a0d0-ae18639f7e4e",
+  "meta": {
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "r7WFPNi0GX0wzPh8",
+  "tags": []
+}
