@@ -163,7 +163,7 @@ Create an image prompt for an #short form viral video created using AI Video Aut
 
 ## HELPER A
 
-Exploring simple fine-tuning techniques
+Exploring simple fine-tuning techniques. Create a workflow called `HELPER - Upload Init Image`.
 
 ### Helper A Reference URLs
 
@@ -210,7 +210,7 @@ Get image id from the `Get presigned URL`
 
 ## HELPER B
 
-Gen images (image-2-image)
+Create a workflow called `HELPER - Image to Image Gen`.
 
 ### HTTP Request - `Gen image with Leonardo.ai`
 
