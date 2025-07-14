@@ -8,7 +8,7 @@ Welcome to `Advanced A.I. Video Automation THE MOVIE`
 2. Airtable setup
 3. Write Script
 4. TTS (Text-2-Speech)
-5. Break Speech into Segments
+5. Segment Spoken Audio
   - HELPER: Validate Segment Durations
 6. Generate Images for Each Segment
   - HELPER: Upload Init Images

@@ -8,12 +8,13 @@ Now we will convert the script into audio using ElevenLabs
 2. [Table of Contents](#table-of-contents)
 3. [Useful tools](#useful-tools)
 4. [Jump into n8n](#jump-into-n8n)
-    - [Add a node - Fetch script from Airtable](#add-a-node---fetch-script-from-airtable)
-    - [Add a node - Eleven Labs TTS](#add-a-node---eleven-labs-tts)
-    - [Add a node - Upload audio to Dropbox](#add-a-node---upload-audio-to-dropbox)
-    - [Add a node - Create a Dropbox Share Link](#add-a-node---create-a-dropbox-share-link)
-    - [Add a node - Edit Field](#add-a-node---edit-fields-set)
-    - [Add a node - Airtable: Update Record](#add-a-node---update-record-in-airtable)
+  - [Add a node - Fetch script from Airtable](#add-a-node---fetch-script-from-airtable)
+  - [Add a node - Eleven Labs TTS](#add-a-node---eleven-labs-tts)
+  - [Add a node - Upload audio to Dropbox](#add-a-node---upload-audio-to-dropbox)
+  - [Add a node - Create a Dropbox Share Link](#add-a-node---create-a-dropbox-share-link)
+  - [Add a node - Edit Field](#add-a-node---edit-fields-set)
+  - [Add a node - Airtable: Update Record](#add-a-node---update-record-in-airtable)
+5. [Free Workaround](#free-workaround)
 
 ## Useful tools
 
@@ -26,7 +27,7 @@ Now we will convert the script into audio using ElevenLabs
 
 Create a workflow called whatever you want but I suggest ie: `TTS`
 
-### Add a node - `Fetch script from Airtable`
+### Add a node - `Get Script`
 
 - Let's add an `Airtable - Search Records` node
   - Go to the Builder Hub in Airtable and create an access token
@@ -45,9 +46,9 @@ Create a workflow called whatever you want but I suggest ie: `TTS`
     - FYI: https://support.airtable.com/docs/formula-field-reference
   - Limit: 1
 - And "Test step" the node
-- Rename the node: `Fetch script from Airtable`
+- Rename the node: `Get Script`
 
-### Add a node - `Eleven Labs TTS`
+### Add a node - `ElevenLabs TTS`
 
 - Let's add an `HTTP Request` node
 - REFERENCE: https://elevenlabs.io/docs/api-reference/text-to-speech/convert?explorer=true
@@ -76,7 +77,7 @@ Create a workflow called whatever you want but I suggest ie: `TTS`
 
     - Find the `model_id` param here: https://elevenlabs.io/docs/models#models-overview
   - And "Test step" the node
-- Rename the node: `Eleven Labs TTS`
+- Rename the node: `ElevenLabs TTS`
 
 ### Add a node - `Upload Audio to Dropbox`
 
@@ -91,9 +92,9 @@ Create a workflow called whatever you want but I suggest ie: `TTS`
   - Input Binary Field
     - `data` from previous node
 - And "Test step" the node
-- Rename the node: `Upload TTS file to Dropbox`
+- Rename the node: `Upload Audio to Dropbox`
 
-### Add a node - `Create a Dropbox Share Link`
+### Add a node - `Create Dropbox Share Link`
 
 - Peep the `additional_info/configure_dropbox_oauth2_token.md` file
 - Configure the node
@@ -117,7 +118,7 @@ curl -X POST https://api.dropboxapi.com/2/sharing/create_shared_link_with_settin
   }
 }
 ```
-- Rename the node: `Get link to file in Dropbox`
+- Rename the node: `Create Dropbox Share Link`
 
 ### Add a node - `Edit Fields (Set)`
 
@@ -146,3 +147,7 @@ curl -X POST https://api.dropboxapi.com/2/sharing/create_shared_link_with_settin
 ]
 ```
 - Spoken Audio URL: `{{ $json.direct_dropbox_url }}`
+
+## FREE Workaround
+
+If you have a microphone on your phone or laptop, try recording the script yourself.
