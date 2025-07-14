@@ -42,3 +42,7 @@ Welcome to `Advanced A.I. Video Automation THE MOVIE`
 ### Shout outs
 
 Shout out to [Stephen G. Pope](https://www.youtube.com/c/stephengpope)
+
+### High Level
+
+Mind -> Script -> Audio -> Segmentation -> Story Board -> Video -> Final Compilation
