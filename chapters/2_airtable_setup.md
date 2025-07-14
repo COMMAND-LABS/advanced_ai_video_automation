@@ -8,9 +8,9 @@ Info regarding setting up Airtable
 2. [High Level Airtable Setup Steps](#high-level-airtable-setup-steps)
 3. [Create a Base in your account](#create-a-base-in-your-account)
 4. [Create the following tables in your Base](#create-the-following-tables-in-your-base)
-    - [Scripts Table Schema](#scripts-table-schema)
-    - [Segments Table Schema](#segments-table-schema)
-    - [Miscellaneous Table Schema](#miscellaneous-table-schema)
+  - [Scripts Table Schema](#scripts-table-schema)
+  - [Segments Table Schema](#segments-table-schema)
+  - [Miscellaneous Table Schema](#miscellaneous-table-schema)
 
 ## Shout outs
 

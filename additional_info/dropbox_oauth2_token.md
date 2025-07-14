@@ -16,7 +16,7 @@ Configuring a custom "Dropbox OAuth2 Token" for n8n
 
 - Go to: n8n Dashboard > Credentials tab
   - Create a new credential (OAuth2 API):
-    - Edit credential Name: `Dropbox Custom OAuth2 Credential with refresh token`
+    - Edit credential Name: `Dropbox OAuth2 Refresh Token Cred AAIVA`
     - OAuth Redirect URL: `https://oauth.n8n.cloud/oauth2/callback`
     - Grant Type: `Authorization Code`
     - Authorization URL: `https://www.dropbox.com/oauth2/authorize`

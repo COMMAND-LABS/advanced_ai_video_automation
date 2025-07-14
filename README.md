@@ -10,7 +10,7 @@ Welcome to `Advanced A.I. Video Automation THE MOVIE`
 4. TTS (Text-2-Speech)
 5. Segment Spoken Audio
   - HELPER: Validate Segment Durations
-6. Generate Images for Each Segment
+6. Segments to Images
   - HELPER: Upload Init Images
   - HELPER: Image-2-Image Generation
 7. Image-2-Video
