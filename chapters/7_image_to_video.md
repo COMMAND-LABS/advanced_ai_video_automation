@@ -7,11 +7,11 @@ Now we will convert selected segments of our story board into video clips
 1. [TLDR](#tldr)
 2. [Table of Contents](#table-of-contents)
 3. [Jump into n8n](#jump-into-n8n)
-    - [Add node - Fetch script from Airtable](#add-node---get-script)
-    - [Add node - Search for segments](#add-node---get-segments)
-    - [Add node - If](#add-node---if)
-    - [Add node - Falai---Gen-video](#add-node---falai---gen-video)
-    - [Add node - Airtable - Update record](#add-node---airtable---update-record)
+  - [Add node - Fetch script from Airtable](#add-node---get-script)
+  - [Add node - Search for segments](#add-node---get-segments)
+  - [Add node - If](#add-node---if)
+  - [Add node - Falai---Gen-video](#add-node---falai---gen-video)
+  - [Add node - Airtable - Update record](#add-node---airtable---update-record)
 
 ## Jump into n8n
 

@@ -7,11 +7,11 @@ We will now store the generated video clips into Airtable
 1. [TLDR](#tldr)
 2. [Table of Contents](#table-of-contents)
 3. [Jump into n8n](#jump-into-n8n)
-    - [Add a node - Get script](#add-a-node---get-script)
-    - [Add a node - Search for segments](#add-a-node---get-segments)
-    - [Add a node - If (Make Video is TRUE)](#add-a-node---if-make-video-is-true)
-    - [Add a node - HTTP Request - Download gen'd video metadata](#add-a-node---http-request---download-gend-video-metadata)
-    - [Add a node - Airtable - Update a record](#add-a-node---airtable---update-a-record)
+  - [Add a node - Get script](#add-a-node---get-script)
+  - [Add a node - Search for segments](#add-a-node---get-segments)
+  - [Add a node - If (Make Video is TRUE)](#add-a-node---if-make-video-is-true)
+  - [Add a node - HTTP Request - Download gen'd video metadata](#add-a-node---http-request---download-gend-video-metadata)
+  - [Add a node - Airtable - Update a record](#add-a-node---airtable---update-a-record)
 
 ## Jump into n8n
 
