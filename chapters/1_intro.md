@@ -32,7 +32,7 @@ THE ADDITIONAL TOOLS I'M REFFERING TO ARE...
   - Web app ($12/month)
   - Leonardo.ai API ($9/month)
 -  Fal.ai (https://fal.ai)
-  - Credits based
-  - Expect to burn $10-$20 USD
+    - Credits based
+    - Expect to burn $10-$20 USD
 
 Got it?! This is going to be amazing. Let's get started!
