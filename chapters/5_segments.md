@@ -84,7 +84,7 @@ curl --request POST \
 - Configure the node
   - Resource: Record
   - Operation: Search
-  - Filter By Formula: `{Full Script} = {{ $('Fetch script from Airtable').item.json.ID }}`
+  - Filter By Formula: `{Full Script} = {{ $('Get script').item.json.ID }}`
 - Rename the node: `Get segments`
 
 ### Add a node - `Code`
