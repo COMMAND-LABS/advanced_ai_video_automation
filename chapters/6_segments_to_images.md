@@ -88,6 +88,11 @@ Create an image prompt for an #short form viral video created using AI Video Aut
       - styleUUID: `111dc692-d470-4eec-b791-3475abac4c46` (https://docs.leonardo.ai/docs/generate-images-using-leonardo-phoenix-model)
       - enhancePrompt: `{{Boolean(false)}}`
   - HTTP Request node ie: `Check image gen status`
+    - Method: GET
+    - URL: `https://cloud.leonardo.ai/api/rest/v1/generations/{{ $("Gen image with Leonardo.ai").item.json.sdGenerationJob.generationId }}`
+    - Headers:
+      - Accept: applcation/json
+      - Authorization: Bearer {LEONARDO_API_KEY_HERE} (Should be stored as a credential)
   - If node
     - If status == COMPLETE continue
     - Else Wait and call the `Gen image with Leonardo.ai` again
