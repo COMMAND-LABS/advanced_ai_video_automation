@@ -40,6 +40,10 @@ curl -X POST "https://queue.fal.run/fal-ai/kling-video/v2.1/master/image-to-vide
   --data "{\"prompt\": \"prompt\",\"image_url\": \"your_image_url_here\",\"duration\": \"5 or 10\"}"
 ```
 
+### FYI
+
+`{{ $json['End Time'] - $json['Start Time'] > 5 ? 10 : 5 }}`
+
 NOTE: Kling 2.1 can only generate 5 or 10 second videos
 TIP: Check fal.ai for rendering progress at `https://fal.ai/models/fal-ai/kling-video/v2.1/master/image-to-video/requests`
 
