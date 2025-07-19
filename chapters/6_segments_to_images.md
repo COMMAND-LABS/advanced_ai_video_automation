@@ -51,7 +51,7 @@ Copy from prior workflows
 ```txt
 # TASK
 
-Create an image prompt for an #short form viral video created using AI Video Automation techniques. Your task is to create an image prompt that will produce a beautiful and aesthetically pleasing image for a section of the overall script. The image prompt text should contain no special chars and be ready for use by a image-to-image model.
+Create an image prompt for a short-form viral video. Your task is to create an image prompt that will produce a beautiful and aesthetically pleasing image for a section (or scene) of an OVERALL SCRIPT. The image prompt text should contain no special chars and be ready for use by an image generation model.
 
 ## CURRENT SECTION OF SCRIPT
 
